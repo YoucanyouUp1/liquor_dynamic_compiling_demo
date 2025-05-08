@@ -1,9 +1,7 @@
 package com.demo.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.message.AsynchronouslyFormattable;
 import org.noear.liquor.DynamicCompiler;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,17 +15,17 @@ import java.util.stream.Stream;
 @Slf4j
 @RequestMapping("/demo")
 public class DemoController {
-    @RequestMapping("/hello")
-    public String hello() {
-        return "Hello, World!";
-    }
-
     private DynamicCompiler compiler;
     private String directoryPath = "D:\\my-workspace\\liquor_dynamic_compiling_demo\\liquor_dynamic_compiling_demo\\src\\main\\java\\com\\demo\\dynamic\\script\\";
     public DemoController() {
         this.compiler = new DynamicCompiler();
-        loadAndCompileFiles();
-        startFileWatcher();
+        /*loadAndCompileFiles();
+        startFileWatcher();*/
+    }
+
+    @RequestMapping("/hello")
+    public String hello() {
+        return "Hello, World!";
     }
 
     private void loadAndCompileFiles() {
@@ -89,7 +87,7 @@ public class DemoController {
     @RequestMapping("/testJavaScript")
     public String test() throws Exception {
         // 获取请求报文参数
-        Map<String,Object> params=new HashMap<>();
+        Map<String, Object> params = new HashMap<>();
         Class<?> clazz = compiler.getClassLoader().loadClass("com.demo.dynamic.script.DynamicDemoScript");
         Object instance = clazz.getDeclaredConstructor().newInstance();
         return clazz.getMethod("hello", Map.class).invoke(instance, params).toString();
